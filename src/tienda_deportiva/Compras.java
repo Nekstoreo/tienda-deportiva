@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package tienda_deportiva;
 
 import javax.swing.table.*;
@@ -11,10 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-/**
- *
- * @author Jaime Brand Ochoa
- */
+
 public class Compras extends javax.swing.JFrame {
 
     public static DefaultTableModel modelo_compras;//me define la taba

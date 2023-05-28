@@ -1,6 +1,6 @@
 # Tienda de Artículos Deportivos
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Nekstoreo/tienda-deportiva/blob/main/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-GNU-blue.svg)](https://github.com/Nekstoreo/tienda-deportiva/blob/main/LICENSE)
 [![Java Version](https://img.shields.io/badge/Java-1.17-blue.svg)](https://www.oracle.com/java/technologies/downloads/#java17)
 
 ¡Bienvenido/a a la Tienda de Artículos Deportivos! Este proyecto es parte de mi clase de lógica de programación en la universidad y fue desarrollado por Nekstoreo, estudiante de ingeniería en sistemas e informática.
