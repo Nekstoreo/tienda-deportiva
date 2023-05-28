@@ -17,7 +17,12 @@ public class Ropa extends javax.swing.JFrame {
         modelo_ropa = (DefaultTableModel) Tabla_Ropa.getModel();
         Tabla_Ropa.setModel(modelo_ropa);
     }
-
+    
+    
+    
+    /*
+    * Metodos Usados en esta clase
+     */
     private void agregarItemALaTabla(String tipo, String prenda, short ref, float precio, String talla) {
 
         // Comprobar si todos los campos están vacíos

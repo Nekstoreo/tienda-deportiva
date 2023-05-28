@@ -18,16 +18,18 @@ public class Registrarse extends javax.swing.JFrame {
         this.setExtendedState(NORMAL);
 
     }
-
-    private boolean isInputEmpty(String usuario, String contraseña) {
+    /*
+    * Metodos Usados en esta clase
+     */
+    private boolean estaLaEntradaVacia(String usuario, String contraseña) {
         return usuario.isEmpty() || contraseña.isEmpty();
     }
 
-    private boolean isValidUsername(String usuario) {
+    private boolean esValidoElUsuario(String usuario) {
         return usuario.length() >= 4 && usuario.length() <= 14;
     }
 
-    private boolean isValidPassword(String contraseña) {
+    private boolean esValidaLaContraseña(String contraseña) {
         return contraseña.length() >= 8;
     }
 
@@ -245,21 +247,21 @@ public class Registrarse extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_signActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_signActionPerformed
-        try (BufferedWriter b_usuarios = new BufferedWriter(new FileWriter("src/base_datos/user", true))) {
+        try (BufferedWriter b_usuarios = new BufferedWriter(new FileWriter("src/base_datos/user.txt", true))) {
             String usuario = user.getText();
             String contraseña = psswd.getText();
 
-            if (isInputEmpty(usuario, contraseña)) {
+            if (estaLaEntradaVacia(usuario, contraseña)) {
                 JOptionPane.showMessageDialog(null, "Porfavor ingrese todos los datos");
                 return;
             }
 
-            if (!isValidUsername(usuario)) {
+            if (!esValidoElUsuario(usuario)) {
                 JOptionPane.showMessageDialog(null, "Usuario no valido, Maximo 14 caracteres");
                 return;
             }
 
-            if (!isValidPassword(contraseña)) {
+            if (!esValidaLaContraseña(contraseña)) {
                 JOptionPane.showMessageDialog(null, "la Contraseña debe tener minimo 8 caracteres");
                 return;
             }

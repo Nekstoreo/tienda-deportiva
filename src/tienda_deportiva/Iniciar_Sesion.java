@@ -227,55 +227,65 @@ public class Iniciar_Sesion extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_volverActionPerformed
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
-
         try {
-            //Lee los archivos de la base de datos de usuarios            
-            FileReader file_user = new FileReader("D:\\WorkSpace\\P_Final\\src\\base_datos\\user.txt");
-            BufferedReader dat_user = new BufferedReader(file_user);
+            // Lee el archivo de la base de datos de usuarios
+            BufferedReader dat_user = new BufferedReader(new FileReader("src/base_datos/user.txt"));
 
-            String linea = "";
+            // Obtiene el usuario y la contraseña de los campos de entrada
             String usuario = user.getText();
             String contra = psswd.getText();
-            linea = dat_user.readLine();
 
-            if (usuario.isEmpty() || contra.isEmpty()) {  //Comprobamos que los campos no esten vacios
-                JOptionPane.showMessageDialog(null, "Alguno de los campos esta vacio");
-            } else {
-                while (linea != null && login == false) {
-                    String usuario_db = "";
-                    String contra_db = "";
-                    String[] parts = new String[1];
-                    parts = linea.split(";");
-                    usuario_db = parts[0];
-                    contra_db = parts[1];
-                    if ((contra.equals(contra_db) && usuario.equals(usuario_db)) == true) {
-                        login = true;
-                    }
-                    linea = dat_user.readLine();
-
-                }
-                if (login == true) {
-                    JOptionPane.showMessageDialog(null, "Bienvenido " + usuario);
-                    this.setVisible(false);//me cierra la anterior donde estaba parado
-                    Pagina_Principal_User p_user = new Pagina_Principal_User();
-                    p_user.setVisible(login);
-
-                } else {
-                    JOptionPane.showMessageDialog(null, "Usuario no existe o Contraseña Incorrecta");
-                    user.setText(null);
-                    psswd.setText(null);
-                }
-
+            // Verifica si los campos están vacíos
+            if (usuario.isEmpty() || contra.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Alguno de los campos está vacío");
+                return;
             }
-            dat_user.close();
-            Compras carro = new Compras();
-            carro.setVisible(false);
+
+            // Valida las credenciales del usuario
+            if (validarCredencialesUsuario(usuario, contra)) {
+                // Inicio de sesión exitoso
+                JOptionPane.showMessageDialog(null, "Bienvenido " + usuario);
+                this.setVisible(false);
+                Pagina_Principal_Usuario p_user = new Pagina_Principal_Usuario();
+                p_user.setVisible(true);
+                return;
+            } else {
+                // Inicio de sesión fallido
+                JOptionPane.showMessageDialog(null, "Usuario no existe o Contraseña Incorrecta");
+                user.setText(null);
+                psswd.setText(null);
+            }
         } catch (IOException error) {
-
-            System.out.println("\nSe presento un error iniciando sesion \n" + error);
-
+            System.out.println("\nSe presentó un error iniciando sesión \n" + error);
         }
     }//GEN-LAST:event_btn_loginActionPerformed
+
+    private boolean validarCredencialesUsuario(String usuario, String contra) throws FileNotFoundException, IOException {
+        // Lee el archivo de la base de datos de usuarios
+        FileReader file_user = new FileReader("src/base_datos/user.txt");
+        BufferedReader dat_user = new BufferedReader(file_user);
+
+        // Itera sobre las líneas del archivo
+        String linea;
+        while ((linea = dat_user.readLine()) != null) {
+            // Divide la línea en nombre de usuario y contraseña
+            String[] parts = linea.split(";");
+            String usuario_db = parts[0];
+            String contra_db = parts[1];
+            
+            System.out.println(usuario_db);
+            System.out.println(contra_db);
+            System.out.println(usuario);
+            System.out.println(contra);
+
+            // Verifica si el nombre de usuario y la contraseña coinciden
+            if (usuario.equals(usuario_db) && contra.equals(contra_db)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -302,10 +312,8 @@ public class Iniciar_Sesion extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Iniciar_Sesion().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Iniciar_Sesion().setVisible(true);
         });
     }
 

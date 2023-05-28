@@ -22,31 +22,21 @@ public class Ventas extends javax.swing.JFrame {
     }
 
     private void cargar() {
-        try {
-            Object[] columnNames = {"Fecha", "Comprador", "Cliente", "Metodo de pago", "Nro Cuotas", "Valor cuota", "Pago total"};
-            Object[][] data = new Object[100][7];
+        String[] columnNames = {"Fecha", "Comprador", "Cliente", "Metodo de pago", "Nro Cuotas", "Valor cuota", "Pago total"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
+        try (BufferedReader dat = new BufferedReader(new FileReader("src/base_datos/registro_ventas.txt"))) {
             String linea = "";
-            FileReader file = new FileReader("D:\\WorkSpace\\P_Final\\src\\base_datos\\registro_ventas.txt");
-            BufferedReader dat = new BufferedReader(file);
-
-            linea = dat.readLine();
-            int cont = 0;
-            while (linea != null) {
-                String registro[] = linea.split(";");
-                for (int i = 0; i < 7; i++) {
-                    data[cont][i] = registro[i];
+            while ((linea = dat.readLine()) != null) {
+                if (!linea.isBlank()) {
+                    String[] registro = linea.split(";");
+                    model.addRow(registro);
                 }
-                cont++;
-                linea = dat.readLine();
             }
-            Tabla.setModel(new DefaultTableModel(data, columnNames));
-
         } catch (IOException error) {
-
             System.out.println("\nSe presento un error\n" + error);
-
         }
+        Tabla.setModel(model);
     }
 
     /**
@@ -88,21 +78,21 @@ public class Ventas extends javax.swing.JFrame {
         registro.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Fecha", "Comprador", "Cliente", "Metodo de pago", "Nro Cuotas", "Valor Cuota", "Pago total"
-            }
+                new Object[][]{
+                    {null, null, null, null, null, null, null},
+                    {null, null, null, null, null, null, null},
+                    {null, null, null, null, null, null, null}
+                },
+                new String[]{
+                    "Fecha", "Comprador", "Cliente", "Metodo de pago", "Nro Cuotas", "Valor Cuota", "Pago total"
+                }
         ) {
-            Class[] types = new Class [] {
+            Class[] types = new Class[]{
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+                return types[columnIndex];
             }
         });
         jScrollPane1.setViewportView(Tabla);
@@ -133,18 +123,14 @@ public class Ventas extends javax.swing.JFrame {
 
     private void generarActionPerformed(java.awt.event.ActionEvent evt) {
 
-    try {
-            FileReader file_r = new FileReader("src/base_datos/registro_ventas.txt");
-            BufferedReader dat_r = new BufferedReader(file_r);
-            String linea = "";
-
+        try {
+            BufferedReader dat_r = new BufferedReader(new FileReader("src/base_datos/registro_ventas.txt"));
             int[] metodosPago = getMetodosPago(dat_r);
 
             DefaultPieDataset datos = new DefaultPieDataset();
             datos.setValue("Efectivo", metodosPago[0]);
             datos.setValue("Tarjeta", metodosPago[1]);
             datos.setValue("Credito Almacen", metodosPago[2]);
-
             JFreeChart grafica = ChartFactory.createPieChart(
                     "Metodos de pagos mas usados en la tienda",
                     datos,
@@ -153,26 +139,25 @@ public class Ventas extends javax.swing.JFrame {
                     false);
             ChartPanel panel = new ChartPanel(grafica);
             panel.setMouseWheelEnabled(true);
-            panel.setPreferredSize(new Dimension(900,380));
-            this.grafica.add(panel,BorderLayout.NORTH);
+            panel.setPreferredSize(new Dimension(900, 380));
+            this.grafica.add(panel, BorderLayout.NORTH);
             this.generar.setVisible(false);
             pack();
             repaint();
-            
+            for (int pagos : metodosPago){
+                System.out.println(pagos);
+            }
+
         } catch (IOException error) {
-
             System.out.println("\nSe presento un error\n" + error);
-
         }
     }
 
     private int[] getMetodosPago(BufferedReader dat_r) throws IOException {
-        String linea = "";
+        String linea;
+        int efectivo = 0, tarjeta = 0, credito = 0;
 
-        short efectivo = 0, tarjeta = 0, credito = 0;
-
-        linea = dat_r.readLine();
-        while (linea != null) {
+        while ((linea = dat_r.readLine()) != null) {
             if (linea.contains("Efectivo")) {
                 efectivo++;
             } else if (linea.contains("Tarjeta")) {
@@ -180,11 +165,9 @@ public class Ventas extends javax.swing.JFrame {
             } else if (linea.contains("Credito_Almacen")) {
                 credito++;
             }
-            linea = dat_r.readLine();
         }
-        return new int[] {efectivo, tarjeta, credito};
+        return new int[]{efectivo, tarjeta, credito};
     }
-
 
     /**
      * @param args the command line arguments

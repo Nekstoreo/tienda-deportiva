@@ -57,6 +57,8 @@ public class Factura extends javax.swing.JFrame {
         Total_Pagar = new javax.swing.JTextField();
         descuento = new javax.swing.JTextField();
         valorcuota = new javax.swing.JTextField();
+        Cedula = new javax.swing.JTextField();
+        fecha_factura = new javax.swing.JTextField();
         finalizar_compra = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -69,7 +71,7 @@ public class Factura extends javax.swing.JFrame {
         jLabel30 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        fecha_factura = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
         bg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -107,11 +109,12 @@ public class Factura extends javax.swing.JFrame {
                 numerocuotasActionPerformed(evt);
             }
         });
-        jPanel1.add(numerocuotas, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 492, 250, 30));
+        jPanel1.add(numerocuotas, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 470, 250, 30));
 
         InfoCliente.setEnabled(false);
-        jPanel1.add(InfoCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 460, 280, 30));
+        jPanel1.add(InfoCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 480, 280, 30));
 
+        Nombre.setEditable(false);
         Nombre.setEnabled(false);
         Nombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,17 +129,17 @@ public class Factura extends javax.swing.JFrame {
                 modopagoActionPerformed(evt);
             }
         });
-        jPanel1.add(modopago, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 452, 250, 30));
+        jPanel1.add(modopago, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 440, 250, 30));
 
         Total.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         Total.setEnabled(false);
-        jPanel1.add(Total, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 500, 280, 30));
+        jPanel1.add(Total, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 510, 280, 30));
 
         Iva.setEnabled(false);
-        jPanel1.add(Iva, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 570, 250, 30));
+        jPanel1.add(Iva, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 530, 250, 30));
 
         Total_Pagar.setEnabled(false);
-        jPanel1.add(Total_Pagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 610, 250, 30));
+        jPanel1.add(Total_Pagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 600, 250, 30));
 
         descuento.setEditable(false);
         descuento.setEnabled(false);
@@ -145,11 +148,19 @@ public class Factura extends javax.swing.JFrame {
                 descuentoActionPerformed(evt);
             }
         });
-        jPanel1.add(descuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 550, 280, 30));
+        jPanel1.add(descuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 540, 280, 30));
 
         valorcuota.setEditable(false);
         valorcuota.setEnabled(false);
-        jPanel1.add(valorcuota, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 532, 250, 30));
+        jPanel1.add(valorcuota, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 500, 250, 30));
+
+        Cedula.setEditable(false);
+        Cedula.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel1.add(Cedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 450, 280, -1));
+
+        fecha_factura.setEditable(false);
+        fecha_factura.setEnabled(false);
+        jPanel1.add(fecha_factura, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 410, 250, 30));
 
         finalizar_compra.setText("FINALIZAR COMPRA");
         finalizar_compra.addActionListener(new java.awt.event.ActionListener() {
@@ -157,44 +168,44 @@ public class Factura extends javax.swing.JFrame {
                 finalizar_compraActionPerformed(evt);
             }
         });
-        jPanel1.add(finalizar_compra, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 600, 460, 30));
+        jPanel1.add(finalizar_compra, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 590, 460, 50));
 
         jLabel10.setText("NOMBRE DEL COMPRADOR:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 410, 170, 40));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, 180, 30));
 
         jLabel8.setText("CLIENTE ALMACEN:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, 130, 20));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 480, 180, 30));
 
         jLabel11.setText("FECHA DE COMPRA:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 410, 120, 40));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 410, 170, 30));
 
+        jLabel5.setFont(new java.awt.Font("Noto Sans Regular", 3, 18)); // NOI18N
         jLabel5.setText("TOTAL A PAGAR:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 600, 140, 40));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 600, 140, 40));
 
         jLabel9.setText("IVA 19%:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 560, 110, 40));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 530, 170, 30));
 
         jLabel7.setText("NUMERO DE CUOTAS:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 490, 140, 40));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 470, 170, 30));
 
         jLabel6.setText("MODO DE PAGO:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 450, 120, 40));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 440, 170, 30));
 
         jLabel3.setText("TOTAL NETO:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 500, 190, 20));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 510, 180, 30));
 
         jLabel30.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/main/main_bg_wide_head (2).jpg"))); // NOI18N
         jPanel1.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1020, 90));
 
         jLabel4.setText("DESCUENTO 5%");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 550, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 540, 180, 30));
 
         jLabel1.setText("VALOR CUOTA:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 540, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 500, 170, 30));
 
-        fecha_factura.setEditable(false);
-        fecha_factura.setEnabled(false);
-        jPanel1.add(fecha_factura, new org.netbeans.lib.awtextra.AbsoluteConstraints(694, 410, 260, 30));
+        jLabel12.setText("CEDULA COMPRADOR");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 450, 180, 30));
 
         bg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/main/main_backg.jpg"))); // NOI18N
         jPanel1.add(bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 1020, 570));
@@ -232,15 +243,8 @@ public class Factura extends javax.swing.JFrame {
     private void finalizar_compraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizar_compraActionPerformed
         //Fecha de la compra
         try {
-
-            FileWriter f_ventas = new FileWriter("D:\\WorkSpace\\P_Final\\src\\base_datos\\registro_ventas.txt", true);
-            BufferedWriter b_ventas = new BufferedWriter(f_ventas);
-
-
+            BufferedWriter b_ventas = new BufferedWriter(new FileWriter("src/base_datos/registro_ventas.txt", true));
             b_ventas.write("\n");
-  
-
-            
             String fecha, nombrecomprador, cliente, modo_pago, cuotas, valor_cuotas, total_pago;
             fecha = fecha_factura.getText();
             nombrecomprador = Nombre.getText();
@@ -249,16 +253,12 @@ public class Factura extends javax.swing.JFrame {
             cuotas = numerocuotas.getText();
             valor_cuotas = valorcuota.getText();
             total_pago = Total_Pagar.getText();
-            
             b_ventas.write("\n"+fecha+";"+nombrecomprador+";"+cliente+";"+modo_pago+";"+cuotas+";"+valor_cuotas+";"+total_pago);
             b_ventas.close();
             JOptionPane.showMessageDialog(null, "Compra finalizada");
             System.exit(0);
-
         } catch (IOException error) {
-
             System.out.println("\nSe presento un error\n" + error);
-
         }
 
 
@@ -300,6 +300,7 @@ public class Factura extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JTextField Cedula;
     public static javax.swing.JTextField InfoCliente;
     public static javax.swing.JTextField Iva;
     public static javax.swing.JTextField Nombre;
@@ -313,6 +314,7 @@ public class Factura extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;

@@ -3,16 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package tienda_deportiva;
-import java.awt.*;
+
+
+
 public class Pagina_Principal extends javax.swing.JFrame {
 
     public Pagina_Principal() {
         initComponents();
         this.setLocationRelativeTo(null); //centrarlo
         this.setResizable(false); // Editar tamaño de pagina pagina
-        Compras carrito = new Compras();
-        carrito.setVisible(true);
-
     }
 
     /**

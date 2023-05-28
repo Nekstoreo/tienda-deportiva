@@ -2,16 +2,10 @@ package tienda_deportiva;
 
 import javax.swing.table.*;
 import javax.swing.JOptionPane;
-import java.awt.HeadlessException;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class Compras extends javax.swing.JFrame {
 
-    static DefaultTableModel modelo_compras;//me define la taba
-    private static final String[] Filas = new String[4];
-    private static boolean login;
+    protected static DefaultTableModel modelo_compras;//me define la taba
 
     public Compras() {
         initComponents();
@@ -48,19 +42,6 @@ public class Compras extends javax.swing.JFrame {
         }
     }
 
-    private float calcularTotal() {
-        float sumar = 0;
-        for (int i = 0; i < Tabla_Compras.getRowCount(); i++) {
-            String datoSuma = Tabla_Compras.getValueAt(i, 2).toString();
-            sumar += Float.parseFloat(datoSuma);
-        }
-        return sumar;
-    }
-
-    private float calcularIVA(float total) {
-        return (float) (total * 0.19);
-    }
-    
     /*
     * Metodos Usados en esta clase
      */
@@ -413,25 +394,19 @@ public class Compras extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
-        // TODO add your handling code here:
-
-        try {
-
-            int verificar, eliminar = -1;
-
-            eliminar = Tabla_Compras.getSelectedRow();//a la fila selecccionada digame cual fila esta ahi
-
-            if (eliminar == -1) {
-                JOptionPane.showMessageDialog(null, "\n debe seleccionae fila para eliminar \n"); //no ha seleccionado nada
-            } else {
-                verificar = JOptionPane.showConfirmDialog(null, "\n esta seguro de remover la fila seleccionada? \n");
-                if (verificar == JOptionPane.YES_OPTION) {
-                    modelo_compras.removeRow(eliminar); //remuva la seleccionada
-                }
-            }
-
-        } catch (HeadlessException error) {
-            JOptionPane.showMessageDialog(null, "\n se presento un error eliminando el registro de la tabla \n" + error);
+        // Verificar si se ha seleccionado una fila
+        int selectedRow = Tabla_Compras.getSelectedRow();
+        if (selectedRow == -1) {
+            // Mostrar un mensaje si no se ha seleccionado ninguna fila
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila para eliminar");
+            // Retornar para prevenir una ejecución adicional
+            return;
+        }
+        // Confirmar con el usuario si desea eliminar la fila
+        int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar la fila seleccionada?");
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Eliminar la fila de la tabla
+            modelo_compras.removeRow(selectedRow);
         }
     }//GEN-LAST:event_eliminarActionPerformed
 
@@ -485,113 +460,52 @@ public class Compras extends javax.swing.JFrame {
     }//GEN-LAST:event_ClienteRegistrado1ActionPerformed
 
     private void generar_factura1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generar_factura1ActionPerformed
-        Factura tabla = new Factura();
-        String datosuma = "";
-        float sumar = 0;
-        float descuento = 0;
-        float sumastotales = 0;
-        float iva = 0;
+        // Comprobar si el campo del nombre del comprador está vacío
+        if (!comprador1.getText().isEmpty()) {
 
-        try {
+            // Establecer el nombre del comprador en la factura
+            Factura.Nombre.setText(comprador1.getText());
 
-            if (!comprador1.getText().isEmpty())//si el campos estan vacios y lo niego
-            {
-                Factura.Nombre.setText(comprador1.getText());
-                Factura.InfoCliente.setText((String) ClienteRegistrado.getSelectedItem());
-                Factura.modopago.setText("Tarjeta");
-                Factura.numerocuotas.setText("NO APLICA");
-                Factura.valorcuota.setText("NO APLICA");
+            // Establecer la información del cliente en la factura
+            Factura.InfoCliente.setText((String) ClienteRegistrado.getSelectedItem());
+            Factura.modopago.setText("Tarjeta");
+            Factura.numerocuotas.setText("NO APLICA");
+            Factura.valorcuota.setText("NO APLICA");
 
-                for (int i = 0; i < Tabla_Compras.getRowCount(); i++) {
-
-                    Filas[0] = Tabla_Compras.getValueAt(i, 0).toString();
-                    Filas[1] = Tabla_Compras.getValueAt(i, 1).toString();
-                    Filas[2] = Tabla_Compras.getValueAt(i, 2).toString();
-                    Filas[3] = Tabla_Compras.getValueAt(i, 3).toString();
-                    Factura.modelo_Factura.addRow(Filas);
-                }
-
-                for (int i = 0; i < Tabla_Compras.getRowCount(); i++) {
-                    datosuma = Tabla_Compras.getValueAt(i, 2).toString();
-                    sumar += Float.parseFloat(datosuma);
-                }
-
-                Factura.Total.setText(String.valueOf(sumar));
-
-                if (sumar >= 0) {
-                    iva = (float) (sumar * 0.19);
-                    Factura.Iva.setText(String.valueOf(iva));
-
-                } else {
-                    JOptionPane.showMessageDialog(null, "\n error calculando iva \n");
-                }
-
-                if (ClienteRegistrado1.getSelectedItem() == "NO") {
-
-                    float sumando = 0;
-
-                    //no tiene descuento
-                    sumando = iva + sumar;
-                    Factura.Total_Pagar.setText(String.valueOf(sumando));
-
-                } else {
-                    try {
-                        //Lee los archivos de la base de datos de usuarios            
-                        FileReader file_user = new FileReader("D:\\WorkSpace\\P_Final\\src\\base_datos\\user.txt");
-                        BufferedReader dat_user = new BufferedReader(file_user);
-
-                        String linea = "";
-                        String usuario = user1.getText();
-                        String contra = psswd1.getText();
-                        linea = dat_user.readLine();
-
-                        if (usuario.isEmpty() || contra.isEmpty()) {  //Comprobamos que los campos no esten vacios
-                            JOptionPane.showMessageDialog(null, "Alguno de los campos esta vacio");
-                        } else {
-                            while (linea != null && login == false) {
-                                String usuario_db = "";
-                                String contra_db = "";
-                                String[] parts = new String[1];
-                                parts = linea.split(";");
-                                usuario_db = parts[0];
-                                contra_db = parts[1];
-                                if ((contra.equals(contra_db) && usuario.equals(usuario_db)) == true) {
-                                    login = true;
-                                }
-                                linea = dat_user.readLine();
-
-                            }
-                            if (login == true) {
-                                JOptionPane.showMessageDialog(null, "Inicio sesion correctamente");
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Usuario no existe o Contraseña Incorrecta");
-                            }
-
-                        }
-                        dat_user.close();
-                    } catch (IOException error) {
-
-                        System.out.println("\nSe presento un error iniciando sesion \n" + error);
-
-                    }
-                    descuento = (float) (sumar * 0.03);
-                }
-
-                //descuento 5% por ser cliente
-                Factura.descuento.setText(String.valueOf(descuento));
-                sumastotales = iva + (sumar - descuento);
-                Factura.Total_Pagar.setText(String.valueOf(sumastotales)); //puedo hacer esto en lo otro
-
-                tabla.setVisible(true);
-                this.setVisible(false);
-                limpiar_tabla();//limpiar campos
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Campos vacios");
+            // Obtenga el monto total de los artículos en la tabla de compras
+            float total = 0;
+            for (int i = 0; i < Tabla_Compras.getRowCount(); i++) {
+                total += Float.parseFloat(Tabla_Compras.getValueAt(i, 2).toString());
             }
 
-        } catch (HeadlessException | NumberFormatException error) {
-            System.out.println("\n se presento un error \n" + error);
+            // Calcular el IVA
+            float iva = (float) (total * 0.19);
+
+            // Calcular el descuento
+            float descuento;
+            if (ClienteRegistrado1.getSelectedItem() == "NO") {
+                descuento = 0;
+            } else {
+                descuento = (float) (total * 0.03);
+            }
+
+            // Calcular el monto total a pagar
+            float total_pagar = total + iva - descuento;
+
+            // Establecer el monto total en la factura
+            Factura.Total.setText(String.valueOf(total));
+            Factura.Iva.setText(String.valueOf(iva));
+            Factura.descuento.setText(String.valueOf(descuento));
+            Factura.Total_Pagar.setText(String.valueOf(total_pagar));
+
+            // Mostrar la factura
+            Factura tabla = new Factura();
+            tabla.setVisible(true);
+            this.setVisible(false);
+            limpiar_tabla();
+
+        } else { // Mostrar un mensaje si el campo del nombre del comprador está vacío            
+            JOptionPane.showMessageDialog(null, "Campos vacios");
         }
     }//GEN-LAST:event_generar_factura1ActionPerformed
 
@@ -612,44 +526,55 @@ public class Compras extends javax.swing.JFrame {
     }//GEN-LAST:event_cedulaActionPerformed
 
     private void generar_factura2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generar_factura2ActionPerformed
-        String compradorCedula = cedula.getText();
-        if (comprador3.getText().isEmpty() || compradorCedula.isEmpty()) {
+        // Verificar si el campo del nombre del comprador está vacío
+        if (comprador3.getText().isEmpty() || cedula.getText().isEmpty()) {
+            // Mostrar un mensaje si el campo del nombre del comprador está vacío
             JOptionPane.showMessageDialog(null, "Campos vacíos");
+            // Retornar para prevenir una ejecución adicional
             return;
         }
-
-        Factura tabla = new Factura();
-        tabla.setVisible(true);
-        this.setVisible(false);
-
-        Factura.Nombre.setText(compradorCedula);
-        Factura.descuento.setText("NO APLICA");
+        // Obtener el nombre y la cédula del comprador
+        String compradorNombre = comprador3.getText();
+        String compradorCedula = cedula.getText();
+        // Crear un nuevo objeto de factura
+        Factura factura = new Factura();
+        // Establecer el nombre y la cédula del comprador en la factura
+        Factura.Nombre.setText(compradorNombre);
+        Factura.Cedula.setText(compradorCedula);
+        // Establecer la información del cliente en la factura
         Factura.InfoCliente.setText((String) ClienteRegistrado.getSelectedItem());
         Factura.modopago.setText("Credito_Almacen");
         Factura.numerocuotas.setText((String) Ncuotas.getSelectedItem());
-
+        // Obtener el monto total de los artículos en la tabla de compras
+        float total = 0;
         for (int i = 0; i < Tabla_Compras.getRowCount(); i++) {
-            String[] filas = new String[4];
-            for (int j = 0; j < 4; j++) {
-                filas[j] = Tabla_Compras.getValueAt(i, j).toString();
-            }
-            Factura.modelo_Factura.addRow(filas);
+            total += Float.parseFloat(Tabla_Compras.getValueAt(i, 2).toString());
         }
-
-        float sumar = calcularTotal();
-        float iva = calcularIVA(sumar);
-
-        Factura.Total.setText(String.valueOf(sumar));
-        Factura.Iva.setText(String.valueOf(iva));
-
-        float totalPagar = sumar + iva;
-        Factura.Total_Pagar.setText(String.valueOf(totalPagar));
-
+        // Calcular el IVA
+        float iva = (float) (total * 0.19);
+        // Calcular el descuento
+        float descuento = 0;
+        if (ClienteRegistrado1.getSelectedItem() == "NO") {
+            descuento = 0;
+        } else {
+            descuento = (float) (total * 0.03);
+        }
+        // Calcular el monto total a pagar
+        float total_pagar = total + iva - descuento;
+        // Establecer el monto total en la factura
+        factura.Total.setText(String.valueOf(total));
+        factura.Iva.setText(String.valueOf(iva));
+        factura.descuento.setText(String.valueOf(descuento));
+        factura.Total_Pagar.setText(String.valueOf(total_pagar));
+        // Obtener el número de cuotas
         int numCuotas = Integer.parseInt((String) Ncuotas.getSelectedItem());
-        float credito = totalPagar / numCuotas;
-        float cuota = (float) (credito + (credito * 0.12));
-        Factura.valorcuota.setText(String.valueOf(cuota));
-
+        // Calcular el monto por cuota
+        float cuota = (float) (total_pagar / numCuotas);
+        // Establecer el monto por cuota en la factura
+        factura.valorcuota.setText(String.valueOf(cuota));
+        // Mostrar la factura
+        factura.setVisible(true);
+        this.setVisible(false);
         limpiar_tabla();
     }//GEN-LAST:event_generar_factura2ActionPerformed
 
