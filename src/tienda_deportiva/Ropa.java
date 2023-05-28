@@ -2,7 +2,6 @@ package tienda_deportiva;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
-import tienda_deportiva.Compras;
 
 public class Ropa extends javax.swing.JFrame {
 

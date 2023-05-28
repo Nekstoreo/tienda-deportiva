@@ -1,26 +1,15 @@
 package tienda_deportiva;
 
-import tienda_deportiva.Pagina_Principal;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-//import org.jfree.chart.*;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-/**
- *
- * @author Jaime Brand Ochoa
- */
 public class Registrarse extends javax.swing.JFrame {
 
-    /**
-     *
-     */
-    Pagina_Principal principal = new Pagina_Principal(); //me abre la pagina
+    private Pagina_Principal principal = new Pagina_Principal();
 
     public Registrarse() {
         initComponents();
@@ -28,8 +17,24 @@ public class Registrarse extends javax.swing.JFrame {
         this.setResizable(false);
     }
 
-    Registrarse(Pagina_Principal aThis, boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private boolean isInputEmpty(String usuario, String contraseña) {
+        return usuario.isEmpty() || contraseña.isEmpty();
+    }
+
+    private boolean isValidUsername(String usuario) {
+        return usuario.length() >= 4 && usuario.length() <= 14;
+    }
+
+    private boolean isValidPassword(String contraseña) {
+        return contraseña.length() >= 8;
+    }
+
+    private void cerrarVentana() {
+        try {
+            this.setVisible(false);
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(null, "Se presento un error en boton pagina anterior \n" + error);
+        }
     }
 
     /**
@@ -220,97 +225,39 @@ public class Registrarse extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_signActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_signActionPerformed
-        // TODO add your handling code here:
-        try {
-
-            FileWriter f_usuarios = new FileWriter("D:\\WorkSpace\\P_Final\\src\\base_datos\\user.txt", true);
-            BufferedWriter b_usuarios = new BufferedWriter(f_usuarios);
-
+        try (BufferedWriter b_usuarios = new BufferedWriter(new FileWriter("src/base_datos/user", true))) {
             String usuario = user.getText();
             String contraseña = psswd.getText();
-            if (usuario.isEmpty() || contraseña.isEmpty()) {
+
+            if (isInputEmpty(usuario, contraseña)) {
                 JOptionPane.showMessageDialog(null, "Porfavor ingrese todos los datos");
-            } else {
-                if (usuario.length() > 14 && usuario.length() < 4) {
-                    JOptionPane.showMessageDialog(null, "Usuario no valido, Maximo 14 caracteres");
-                } else {
-                    if (usuario.contains(".")
-                            || user.getText().contains("&")
-                            || user.getText().contains("?")
-                            || user.getText().contains("¿")
-                            || user.getText().contains("¡")
-                            || user.getText().contains("!")
-                            || user.getText().contains("#")
-                            || user.getText().contains("-")
-                            || user.getText().contains(":")
-                            || user.getText().contains(";")
-                            || user.getText().contains(",")
-                            || user.getText().contains("<")
-                            || user.getText().contains(">")
-                            || user.getText().contains("^")
-                            || user.getText().contains("¬")
-                            || user.getText().contains("°")
-                            || user.getText().contains("=")
-                            || user.getText().contains("'")
-                            || user.getText().contains("\\")
-                            || user.getText().contains("/")
-                            || user.getText().contains("*")
-                            || user.getText().contains("+")
-                            || user.getText().contains("{")
-                            || user.getText().contains("}")
-                            || user.getText().contains("~")
-                            || user.getText().contains("(")
-                            || user.getText().contains(")")
-                            || user.getText().contains("$")
-                            || user.getText().contains("_")
-                            || user.getText().contains("0")
-                            || user.getText().contains("1")
-                            || user.getText().contains("2")
-                            || user.getText().contains("3")
-                            || user.getText().contains("4")
-                            || user.getText().contains("5")
-                            || user.getText().contains("6")
-                            || user.getText().contains("7")
-                            || user.getText().contains("8")
-                            || user.getText().contains("9")
-                            || user.getText().contains("0")
-                            || user.getText().contains(" ")) {
-                        JOptionPane.showMessageDialog(null, "el Usuario Solo puede tener letras, no puede tener numeros, espacios ni caracteres especiales");
-                    } else {
-                        if (contraseña.length() >= 8) {
-                            if (contraseña.equals(psswd_vf.getText())) {
-
-                                b_usuarios.write("\n" + usuario + ";" + contraseña);
-                                b_usuarios.close();
-                                JOptionPane.showMessageDialog(null, "Usuario Registrado Correctamente");
-                                this.setVisible(false);
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Contraseñas no coinciden");
-                            }
-                        } else {
-                            JOptionPane.showMessageDialog(null, "la Contraseña debe tener minimo 8 caracteres");
-                        }
-
-                    }
-                }
+                return;
             }
 
-        } catch (IOException error) {
+            if (!isValidUsername(usuario)) {
+                JOptionPane.showMessageDialog(null, "Usuario no valido, Maximo 14 caracteres");
+                return;
+            }
 
-            System.out.println("\nSe presento un error en registrando datos\n" + error);
+            if (!isValidPassword(contraseña)) {
+                JOptionPane.showMessageDialog(null, "la Contraseña debe tener minimo 8 caracteres");
+                return;
+            }
+            if (!contraseña.equals(psswd_vf.getText())) {
+                JOptionPane.showMessageDialog(null, "Contraseñas no coinciden");
+                return;
+            }
 
+            b_usuarios.write("\n" + usuario + ";" + contraseña);
+        } catch (IOException ex) {
+            Logger.getLogger(Registrarse.class.getName()).log(Level.SEVERE, "Error Base de datos", ex);
         }
+        JOptionPane.showMessageDialog(null, "Usuario Registrado Correctamente");
+        this.setVisible(false);
     }//GEN-LAST:event_btn_signActionPerformed
 
     private void btn_volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_volverActionPerformed
-
-        try {
-
-            this.setVisible(false);//me cierra la aterior donde estaba parado
-
-        } catch (Exception error) {
-            System.out.println("\n se presento un error en boton pagina anterior \n" + error);
-        }
+        cerrarVentana();
     }//GEN-LAST:event_btn_volverActionPerformed
 
     /**
@@ -327,16 +274,24 @@ public class Registrarse extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Registrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Registrarse.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Registrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Registrarse.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Registrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Registrarse.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Registrarse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Registrarse.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -369,4 +324,18 @@ public class Registrarse extends javax.swing.JFrame {
     private javax.swing.JPasswordField psswd_vf;
     private javax.swing.JTextField user;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @return the principal
+     */
+    public Pagina_Principal getPrincipal() {
+        return principal;
+    }
+
+    /**
+     * @param principal the principal to set
+     */
+    public void setPrincipal(Pagina_Principal principal) {
+        this.principal = principal;
+    }
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Compras extends javax.swing.JFrame {
 
-    private static DefaultTableModel modelo_compras;//me define la taba
+    static DefaultTableModel modelo_compras;//me define la taba
     private static final String[] Filas = new String[4];
     private static boolean login;
 
